@@ -7,11 +7,15 @@
 //
 
 import UIKit
+import CoreData
 
 class MoviesTableViewController: UITableViewController {
 
     //Criando nossa label que será a backgroundView da tabela
     var label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 22))
+    
+    var fetchedResultController: NSFetchedResultsController<Movie>!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +27,16 @@ class MoviesTableViewController: UITableViewController {
         label.text = "Sem filmes"
         label.textAlignment = .center
         label.textColor = .white
+        
+        loadMovies()
+    }
+    
+    func loadMovies() {
+        let fetchRequest: NSFetchRequest<Movie> = Movie.fetchRequest()
+        fetchedResultController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        
+        fetchedResultController.delegate = self
+        try! fetchedResultController.performFetch()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -42,7 +56,11 @@ class MoviesTableViewController: UITableViewController {
         //Caso nosso dataSource seja 0, teremos a label aparecendo.
         //tableView.backgroundView = dataSource.count == 0 ? label : nil
         //return dataSource.count //Retornamos o total de itens no nosso dataSource
-        return 0
+        if let count = fetchedResultController.fetchedObjects?.count {
+            return count
+        } else {
+            return 0
+        }
     }
     
     //Método que define a célula que será apresentada em cada linha
@@ -110,4 +128,8 @@ class MoviesTableViewController: UITableViewController {
     }
     */
 
+}
+
+extension MoviesTableViewController: NSFetchedResultsControllerDelegate {
+    
 }

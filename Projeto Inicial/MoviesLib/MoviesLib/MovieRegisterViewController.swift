@@ -47,9 +47,10 @@ class MovieRegisterViewController: UIViewController {
         } catch{
             print(error.localizedDescription)
         }
+        close(nil)
     }
 
-    @IBAction func close(_ sender: Any) {
+    @IBAction func close(_ sender: UIButton?) {
         dismiss(animated: true, completion: nil)
     }
     /*
