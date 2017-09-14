@@ -45,6 +45,9 @@ class MoviesTableViewController: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc=segue.destination as? MovieViewController{
+            vc.movie = fetchedResultController.object(at: tableView.indexPathForSelectedRow!)
+        }
     }
     
 

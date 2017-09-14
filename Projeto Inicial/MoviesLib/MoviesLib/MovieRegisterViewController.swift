@@ -24,6 +24,14 @@ class MovieRegisterViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if movie != nil {
+            tfTitle.text = movie.title
+            tfRating.text = "\(movie.rating)"
+            tfDuration.text = movie.duration
+            tvSummary.text = movie.summary
+            btAddUpdate.setTitle("Atualizar", for: .normal)
+        }
 
         
     }
