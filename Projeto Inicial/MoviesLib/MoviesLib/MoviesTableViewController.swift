@@ -33,7 +33,12 @@ class MoviesTableViewController: UITableViewController {
     
     func loadMovies() {
         let fetchRequest: NSFetchRequest<Movie> = Movie.fetchRequest()
+        let sortDescription = NSSortDescriptor(key: "title", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescription]
+        
         fetchedResultController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        
+        
         
         fetchedResultController.delegate = self
         try! fetchedResultController.performFetch()
@@ -71,16 +76,12 @@ class MoviesTableViewController: UITableViewController {
         //IBOutlets criados
         let cell = tableView.dequeueReusableCell(withIdentifier: "movieCell", for: indexPath) as! MovieTableViewCell
         
-        //Atribuindo os valores de acordo com os dados recuperados de cada Movie
-        //Recuperamos o Movie usando a propriedade row do indexPath da célula em questão
-        /*
-        cell.ivPoster.image = UIImage(named: dataSource[indexPath.row].imageSmall)
-        cell.lbTitle.text = dataSource[indexPath.row].title
-        cell.lbRating.text = "\(dataSource[indexPath.row].rating)"
-        cell.lbSummary.text = dataSource[indexPath.row].summary
-        */
+        let movie = fetchedResultController.object(at: indexPath)
+        cell.lbTitle.text = movie.title
+        cell.lbSummary.text = movie.summary
+        cell.lbRating.text = "\(movie.rating)"
         
-        return cell
+       return cell
     }
 
     /*
@@ -131,5 +132,16 @@ class MoviesTableViewController: UITableViewController {
 }
 
 extension MoviesTableViewController: NSFetchedResultsControllerDelegate {
-    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.reloadData()
+    }
 }
+
+
+
+
+
+
+
+
+
